@@ -3,7 +3,7 @@
 	<property name="VERSION" value="25.3.0.0001"/>
 	<property name="OLD.VER" value="24.4.0.0001"/>
 	<property name="MQSICREATEBAR" value="mqsipackagebar"/>
-	<property name="WORKSPACE" value="/var/tmp/BillPayment"/>
+	<property name="WORKSPACE" value="/home/linuxuser/actions-runner/_work/poc-ant/poc-ant"/>
 	<property name="RELEASE.DIR" value="${basedir}/release"/>
 	<property name="BAR.FILE" value="${RELEASE.DIR}/BillPayment-${VERSION}.bar"/>
 	<target name="init" description="Initialization">
@@ -11,7 +11,7 @@
 		<echo message="Java Version: ${java.version}"/>
 		<echo message="Broker Version: ${env.MQSI_VERSION}"/>
 		<echo message="Base Directory: ${basedir}"/>
-		<echo message="Workspace: ${basedir}"/>
+		<echo message="Workspace: ${WORKSPACE}"/>
 		<echo message="Release Directory: ${RELEASE.DIR}"/>
 	</target>
 	<target name="clean" description="Remove bar file, etc.">
