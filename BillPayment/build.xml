@@ -11,7 +11,7 @@
 		<echo message="Java Version: ${java.version}"/>
 		<echo message="Broker Version: ${env.MQSI_VERSION}"/>
 		<echo message="Base Directory: ${basedir}"/>
-		<echo message="Workspace: ${WORKSPACE}"/>
+		<echo message="Workspace: ${basedir}"/>
 		<echo message="Release Directory: ${RELEASE.DIR}"/>
 	</target>
 	<target name="clean" description="Remove bar file, etc.">
