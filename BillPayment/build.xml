@@ -1,0 +1,46 @@
+<project name="BillPayment" default="bar" basedir=".">
+	<property environment="env"/>
+	<property name="VERSION" value="25.3.0.0001"/>
+	<property name="OLD.VER" value="24.4.0.0001"/>
+	<property name="MQSICREATEBAR" value="mqsipackagebar"/>
+	<property name="WORKSPACE" value="/var/tmp/BillPayment"/>
+	<property name="RELEASE.DIR" value="${basedir}/release"/>
+	<property name="BAR.FILE" value="${RELEASE.DIR}/BillPayment-${VERSION}.bar"/>
+	<target name="init" description="Initialization">
+		<echo message="${ant.version}"/>
+		<echo message="Java Version: ${java.version}"/>
+		<echo message="Broker Version: ${env.MQSI_VERSION}"/>
+		<echo message="Base Directory: ${basedir}"/>
+		<echo message="Workspace: ${WORKSPACE}"/>
+		<echo message="Release Directory: ${RELEASE.DIR}"/>
+	</target>
+	<target name="clean" description="Remove bar file, etc.">
+		<delete file="${BAR.FILE}"/>
+		<!--<delete dir="${WORKSPACE}/.metadata"/>-->
+		<!--<delete file="${env.HOME}/development/mid-storebus/.metadata"/>-->
+	</target>
+	<target name="bar" depends="init,clean" description="Build BillPayment BAR File.">
+		<echo message="Building ${BAR.FILE}..."/>
+		<exec executable="${MQSICREATEBAR}" spawn="false">
+			<arg value="-w"/>
+			<arg value="${WORKSPACE}"/>
+			<arg value="-a"/>
+			<arg value="${BAR.FILE}"/>
+			<arg value="-k"/>
+			<arg value="BillPayment"/>
+		</exec>
+		<echo  message="Completed build of ${BAR.FILE}."/>
+	</target>
+	<target name="updversion" depends="init" description="Update version tags.">
+		<echo message="Updating version identifier to ${VERSION} in message flows..."/>
+		<!-- The &#34; matches a double quote, so we're replacing
+
+                        string="${OLD.VER}" with string="${VERSION}" -->
+		<replaceregexp byline="true"
+
+                                           match="string=&#34;${OLD.VER}&#34;"
+
+                                           replace="string=&#34;${VERSION}&#34;"></replaceregexp>
+	</target>
+</project>
+
