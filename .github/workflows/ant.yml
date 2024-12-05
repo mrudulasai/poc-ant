@@ -25,5 +25,4 @@ jobs:
         # Replace with the actual path to your mqsiprofile script
         echo "mqsiprofile has been executed."
 
-    - name: Build with Ant
-      run: ant -noinput -buildfile BillPayment/build.xml
+        ant -noinput -buildfile BillPayment/build.xml
