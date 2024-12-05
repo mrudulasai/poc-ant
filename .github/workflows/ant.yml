@@ -19,5 +19,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
+    - name: Run mqsiprofile
+      run: |
+        source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
+        # Replace with the actual path to your mqsiprofile script
+        echo "mqsiprofile has been executed."
+
     - name: Build with Ant
       run: ant -noinput -buildfile BillPayment/build.xml
