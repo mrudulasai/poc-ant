@@ -23,11 +23,21 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install sshpass
 
+    - name: Test SSH Connection to Remote Server
+      env:
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+      run: |
+        # Test SSH connection
+        echo "Attempting to SSH into $REMOTE_USER@$REMOTE_HOST"
+        sshpass -p $REMOTE_PASSWORD ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 'SSH connection successful'"
+
     - name: Connect to remote server and run build
       env:
-        REMOTE_USER: root
-        REMOTE_HOST: 192.168.18.74
-        REMOTE_PASSWORD: Cyber@2023
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
       run: |
         # Connect via SSH and execute commands remotely
         sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
