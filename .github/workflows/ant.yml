@@ -1,9 +1,9 @@
-name: Build Java Project Remotely
+name: Build Java Project Remotely on RHEL VM Using Ant
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to the main branch
 
 jobs:
   build:
@@ -14,34 +14,39 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 3: Sync project files to the remote server using SCP
-    - name: Sync project files to remote server
+    # Step 2: Install necessary dependencies (scp, sshpass, ant)
+    - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y sshpass ant
+
+    # Step 3: Transfer the code to the remote RHEL VM
+    - name: Transfer files to RHEL VM
+      run: |
+        # Use scp to transfer the project files to the remote RHEL VM
         sshpass -p ${{ secrets.REMOTE_PASSWORD }} scp -r ./ ${REMOTE_USER}@${REMOTE_HOST}:/var/tmp/BillPayment/
       env:
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote host (IP or domain)
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote username
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote password
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote RHEL VM's IP or hostname
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote server SSH username
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote server password
 
-    # Step 4: Run Ant build remotely on the remote server
-    - name: Run Ant build on remote server
+    # Step 4: Run Ant build remotely on the RHEL VM
+    - name: Run Ant build on RHEL VM
       run: |
+        # Use ssh to run the Ant build remotely
         sshpass -p ${{ secrets.REMOTE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
-          # Change to the project directory
+          # Change to the project directory on the RHEL VM
           cd /var/tmp/BillPayment/
-
-          # Source the MQSI profile (required for IBM MQ / App Connect)
-          source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
-          echo "mqsiprofile has been executed."
-
-          # Run Ant build command (using the provided build.xml)
-          echo "Running build.xml"
-          ant -noinput -buildfile BillPayment/build.xml
-
-          # Optionally, print the result or logs after the build
-          echo "Build completed!"
+          
+          # Source the MQSI profile if required (for IBM MQ)
+          # source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
+          
+          # Run the Ant build command
+          ant -noinput -buildfile build.xml  # Replace with the correct path to your build.xml file
+          
+          echo "Build completed successfully!"
         EOF
       env:
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote host (IP or domain)
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote username
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote password
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote RHEL VM's IP or hostname
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote server SSH username
+        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote server password
