@@ -18,26 +18,31 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    # Step 3: Debugging - Print home directory and ensure correct permissions
-    - name: Check home directory and fix permissions for .ssh
+    # Step 3: Ensure .ssh directory exists and fix permissions
+    - name: Ensure .ssh directory exists and fix permissions
       run: |
         echo "Home directory is: $HOME"
         ls -ld $HOME
-        echo "Checking permissions of known_hosts"
-        ls -l $HOME/.ssh/known_hosts || echo "known_hosts does not exist"
         
-        # Fix permissions of the .ssh directory and ensure it's writable
+        # Check if .ssh directory exists, and create it if it does not
+        if [ ! -d "$HOME/.ssh" ]; then
+          echo ".ssh directory does not exist, creating it"
+          mkdir -p $HOME/.ssh
+        fi
+        
+        # Fix permissions for .ssh and known_hosts
         chmod 700 $HOME/.ssh
         touch $HOME/.ssh/known_hosts
         chmod 644 $HOME/.ssh/known_hosts
 
-        # Verify the permissions after fix
+        # Verify the permissions after fixing
         ls -ld $HOME/.ssh
         ls -l $HOME/.ssh/known_hosts
 
     # Step 4: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
     - name: Add remote host to known_hosts
       run: |
+        echo "Adding remote host fingerprint to known_hosts"
         ssh-keyscan -H 192.168.18.74 >> $HOME/.ssh/known_hosts
 
     # Step 5: Set SSH password as environment variable
@@ -47,4 +52,5 @@ jobs:
     # Step 6: Test SSH connection using password
     - name: Test SSH connection
       run: |
+        echo "Testing SSH connection to remote RHEL VM"
         sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@192.168.18.74 "echo 'SSH connection successful!'"
