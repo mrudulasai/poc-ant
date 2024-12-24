@@ -1,41 +1,14 @@
-name: SSH Deploy to RHEL VM with Password
-
-on:
-  push:
-    branches:
-      - main  # or your desired branch
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    # Step 1: Checkout the code
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    # Step 2: Install sshpass (to provide password non-interactively)
-    - name: Install sshpass
-      run: sudo apt-get install -y sshpass
-
-    # Step 3: Debugging - Print the home directory and check permissions
-    - name: Check home directory
-      run: |
-        echo "Home directory is: $HOME"
-        ls -ld $HOME
-        mkdir -p $HOME/.ssh
-        ls -ld $HOME/.ssh
-
-    # Step 4: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
-    - name: Add remote host to known_hosts
-      run: |
-        ssh-keyscan -H 192.168.18.74 >> $HOME/.ssh/known_hosts
-
-    # Step 5: Set SSH password as environment variable
-    - name: Set SSH password as environment variable
-      run: echo "SSH_PASSWORD=${{ secrets.SSH_PASSWORD }}" >> $GITHUB_ENV
-
-    # Step 6: Test SSH connection using password
-    - name: Test SSH connection
-      run: |
-        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@192.168.18.74 "echo 'SSH connection successful!'"
+Reading package lists...
+Building dependency tree...
+Reading state information...
+sshpass is already the newest version (1.09-1).
+0 upgraded, 0 newly installed, 0 to remove and 51 not upgraded.
+0s
+Run echo "Home directory is: $HOME"
+Home directory is: /home/runner
+drwxr-x--- 14 runner docker 4096 Dec 24 15:15 /home/runner
+drwxr-xr-x 2 runner docker 4096 Dec 24 15:16 /home/runner/.ssh
+5s
+Run ssh-keyscan -H 192.168.18.74 >> $HOME/.ssh/known_hosts
+  
+Error: Process completed with exit code 1.
