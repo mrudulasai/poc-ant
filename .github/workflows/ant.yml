@@ -39,11 +39,21 @@ jobs:
         ls -ld $HOME/.ssh
         ls -l $HOME/.ssh/known_hosts
 
-    # Step 4: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
+    # Step 4: Add remote host to known_hosts (to avoid SSH prompts)
     - name: Add remote host to known_hosts
       run: |
         echo "Adding remote host fingerprint to known_hosts"
-        ssh-keyscan -H 192.168.18.74 >> $HOME/.ssh/known_hosts
+        echo "Using host: ${{ secrets.RHEL_HOST }}"
+
+        # Debugging output: Ensure ssh-keyscan can connect
+        ssh-keyscan -H ${{ secrets.RHEL_HOST }} || { echo "Failed to ssh-keyscan ${secrets.RHEL_HOST}"; exit 1; }
+
+        # Append the host key to known_hosts
+        ssh-keyscan -H ${{ secrets.RHEL_HOST }} >> $HOME/.ssh/known_hosts
+
+        # Check if the host was added successfully
+        echo "Last 10 lines of known_hosts:"
+        tail -n 10 $HOME/.ssh/known_hosts  # Show last 10 lines of known_hosts for confirmation
 
     # Step 5: Set SSH password as environment variable
     - name: Set SSH password as environment variable
@@ -53,4 +63,5 @@ jobs:
     - name: Test SSH connection
       run: |
         echo "Testing SSH connection to remote RHEL VM"
-        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@192.168.18.74 "echo 'SSH connection successful!'"
+        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@${{ secrets.RHEL_HOST }} "echo 'SSH connection successful!'"
+
