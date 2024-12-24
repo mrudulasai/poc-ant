@@ -14,12 +14,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Install required dependencies (scp, sshpass, ant)
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y scp sshpass ant
-
     # Step 3: Sync project files to the remote server using SCP
     - name: Sync project files to remote server
       run: |
