@@ -1,52 +1,33 @@
-name: Build Java Project Remotely on RHEL VM Using Ant
+name: SSH Deploy to RHEL VM with Password
 
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
-
+      - main
 jobs:
-  build:
-    runs-on: ubuntu-latest  # GitHub-hosted runner
+  deploy:
+    runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
+    # Step 1: Checkout the code
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # Step 2: Install necessary dependencies (scp, sshpass, ant)
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y sshpass ant
+    # Step 2: Install sshpass (to provide password non-interactively)
+    - name: Install sshpass
+      run: sudo apt-get install -y sshpass
 
-    # Step 3: Transfer the code to the remote RHEL VM
-    - name: Transfer files to RHEL VM
+    # Step 3: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
+    - name: Add remote host to known_hosts
       run: |
-        # Use scp to transfer the project files to the remote RHEL VM
-        sshpass -p ${{ secrets.REMOTE_PASSWORD }} scp -r ./ ${REMOTE_USER}@${REMOTE_HOST}:/var/tmp/BillPayment/
-      env:
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote RHEL VM's IP or hostname
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote server SSH username
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote server password
+        mkdir -p ~/.ssh
+        ssh-keyscan -H 192.168.18.74 >> ~/.ssh/known_hosts
 
-    # Step 4: Run Ant build remotely on the RHEL VM
-    - name: Run Ant build on RHEL VM
+    # Step 4: Set up SSH password environment variable
+    - name: Set SSH password as environment variable
+      run: echo "SSH_PASSWORD=${{ secrets.SSH_PASSWORD }}" >> $GITHUB_ENV
+
+    # Step 5: Test SSH connection using password
+    - name: Test SSH connection
       run: |
-        # Use ssh to run the Ant build remotely
-        sshpass -p ${{ secrets.REMOTE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
-          # Change to the project directory on the RHEL VM
-          cd /var/tmp/BillPayment/
-          
-          # Source the MQSI profile if required (for IBM MQ)
-          # source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
-          
-          # Run the Ant build command
-          ant -noinput -buildfile build.xml  # Replace with the correct path to your build.xml file
-          
-          echo "Build completed successfully!"
-        EOF
-      env:
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}  # Remote RHEL VM's IP or hostname
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}  # Remote server SSH username
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}  # Remote server password
+        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@192.168.18.74 "echo 'SSH connection successful!'"
