@@ -18,16 +18,22 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    # Step 3: Debugging - Print the home directory and check permissions
-    - name: Check home directory and ensure known_hosts file exists
+    # Step 3: Debugging - Print home directory and ensure correct permissions
+    - name: Check home directory and fix permissions for .ssh
       run: |
         echo "Home directory is: $HOME"
         ls -ld $HOME
         echo "Checking permissions of known_hosts"
         ls -l $HOME/.ssh/known_hosts || echo "known_hosts does not exist"
+        
+        # Fix permissions of the .ssh directory and ensure it's writable
+        chmod 700 $HOME/.ssh
         touch $HOME/.ssh/known_hosts
+        chmod 644 $HOME/.ssh/known_hosts
+
+        # Verify the permissions after fix
+        ls -ld $HOME/.ssh
         ls -l $HOME/.ssh/known_hosts
-        chmod 644 $HOME/.ssh/known_hosts  # Ensure the file has correct permissions
 
     # Step 4: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
     - name: Add remote host to known_hosts
