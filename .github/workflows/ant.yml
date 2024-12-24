@@ -18,17 +18,24 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    # Step 3: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
+    # Step 3: Debugging - Print the home directory and check permissions
+    - name: Check home directory
+      run: |
+        echo "Home directory is: $HOME"
+        ls -ld $HOME
+        mkdir -p $HOME/.ssh
+        ls -ld $HOME/.ssh
+
+    # Step 4: Add the RHEL host's fingerprint to known_hosts (to avoid SSH prompts)
     - name: Add remote host to known_hosts
       run: |
-        mkdir -p $HOME/.ssh  # Ensure the .ssh directory exists
         ssh-keyscan -H 192.168.18.74 >> $HOME/.ssh/known_hosts
 
-    # Step 4: Set SSH password as environment variable
+    # Step 5: Set SSH password as environment variable
     - name: Set SSH password as environment variable
       run: echo "SSH_PASSWORD=${{ secrets.SSH_PASSWORD }}" >> $GITHUB_ENV
 
-    # Step 5: Test SSH connection using password
+    # Step 6: Test SSH connection using password
     - name: Test SSH connection
       run: |
         sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@192.168.18.74 "echo 'SSH connection successful!'"
