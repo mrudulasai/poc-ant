@@ -1,48 +1,41 @@
-name: POC on Ant based Java project
+name: Deploy Java Project to Remote RHEL VM
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # Trigger on push to the main branch
 
 jobs:
-  build:
-    # Use GitHub's default hosted runner
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # Step 1: Checkout the code from the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-    # Set up JDK 11
-    - name: Set up JDK 11
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
+    # Step 2: Install necessary tools (Ant, rsync, etc.) on the GitHub Actions runner
+    - name: Install Apache Ant (if required)
+      run: sudo apt-get update && sudo apt-get install -y ant rsync openssh-client
 
-    # Set up SSH connection using password (sshpass)
-    - name: Install sshpass
-      run: sudo apt-get install sshpass
-
-    - name: Test SSH Connection to Remote Server
-      env:
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+    # Step 3: Set up remote RHEL VM credentials using GitHub Secrets
+    - name: Set up environment variables
       run: |
-        # Test SSH connection
-        echo "Attempting to SSH into $REMOTE_USER@$REMOTE_HOST"
-        sshpass -p $REMOTE_PASSWORD ssh -v -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST "echo 'SSH connection successful'"
+        echo "REMOTE_HOST=${{ secrets.REMOTE_HOST }}" >> $GITHUB_ENV
+        echo "REMOTE_USER=${{ secrets.REMOTE_USER }}" >> $GITHUB_ENV
+        echo "REMOTE_PASSWORD=${{ secrets.REMOTE_PASSWORD }}" >> $GITHUB_ENV
 
-    - name: Connect to remote server and run build
-      env:
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        REMOTE_PASSWORD: ${{ secrets.REMOTE_PASSWORD }}
+    # Step 4: Transfer the project files to the remote RHEL VM
+    - name: Sync project files to remote RHEL VM
       run: |
-        # Connect via SSH and execute commands remotely
-        sshpass -p $REMOTE_PASSWORD ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST << 'EOF'
-          echo "Connected to remote server"
-
+        # Use rsync with password authentication to transfer files
+        sshpass -p ${{ secrets.REMOTE_PASSWORD }} rsync -avz --exclude '.git' ./ ${REMOTE_USER}@${REMOTE_HOST}:/var/tmp/BillPayment/
+    # Step 5: Run the Ant build command on the remote RHEL VM
+    - name: Run Ant build remotely on RHEL VM
+      run: |
+        sshpass -p ${{ secrets.REMOTE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
+          # Navigate to the project directory on the remote server
+          cd /var/tmp/BillPayment/
           # Run the mqsiprofile command and build the project using Ant
           source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
           echo "mqsiprofile has been executed."
