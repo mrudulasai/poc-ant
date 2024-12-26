@@ -10,21 +10,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Ping the RHEL VM
+        run: ping -c 4 192.168.18.74
 
-      - name: Set up sshpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass  # Install sshpass tool
-
-      - name: Test SSH Connection to RHEL VM using Password Authentication
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.18.74 "echo 'Connected successfully to RHEL VM'"
-
-      - name: Run commands on RHEL VM using Password Authentication
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.18.74 << 'EOF'
-            # Your shell commands to run on the RHEL VM
-            sudo yum update -y
-            sudo yum install -y your-package
-            # Any other command you want to run remotely
-          EOF
