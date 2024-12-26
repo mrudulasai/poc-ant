@@ -1,67 +1,30 @@
-name: SSH Deploy to RHEL VM with Password
-
+name: Connect to RHEL VM without SSH Key
 on:
   push:
     branches:
-      - main  # or your desired branch
+      - main
 
 jobs:
-  deploy:
+  connect-to-rhel-vm:
     runs-on: ubuntu-latest
-
     steps:
-    # Step 1: Checkout the code
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Step 2: Install sshpass (to provide password non-interactively)
-    - name: Install sshpass
-      run: sudo apt-get install -y sshpass
+      - name: Set up sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass  # Install sshpass tool
 
-    # Step 3: Ensure .ssh directory exists and fix permissions
-    - name: Ensure .ssh directory exists and fix permissions
-      run: |
-        echo "Home directory is: $HOME"
-        ls -ld $HOME
-        
-        # Check if .ssh directory exists, and create it if it does not
-        if [ ! -d "$HOME/.ssh" ]; then
-          echo ".ssh directory does not exist, creating it"
-          mkdir -p $HOME/.ssh
-        fi
-        
-        # Fix permissions for .ssh and known_hosts
-        chmod 700 $HOME/.ssh
-        touch $HOME/.ssh/known_hosts
-        chmod 644 $HOME/.ssh/known_hosts
+      - name: Test SSH Connection to RHEL VM using Password Authentication
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.18.74 "echo 'Connected successfully to RHEL VM'"
 
-        # Verify the permissions after fixing
-        ls -ld $HOME/.ssh
-        ls -l $HOME/.ssh/known_hosts
-
-    # Step 4: Add remote host to known_hosts (to avoid SSH prompts)
-    - name: Add remote host to known_hosts
-      run: |
-        echo "Adding remote host fingerprint to known_hosts"
-        echo "Using host: $RHEL_HOST"
-        
-        # Debugging output: Ensure ssh-keyscan can connect
-        ssh-keyscan -H $RHEL_HOST || { echo "Failed to ssh-keyscan $RHEL_HOST"; exit 1; }
-
-        # Append the host key to known_hosts
-        ssh-keyscan -H $RHEL_HOST >> $HOME/.ssh/known_hosts
-
-        # Check if the host was added successfully
-        echo "Last 10 lines of known_hosts:"
-        tail -n 10 $HOME/.ssh/known_hosts  # Show last 10 lines of known_hosts for confirmation
-
-    # Step 5: Set SSH password as environment variable
-    - name: Set SSH password as environment variable
-      run: echo "SSH_PASSWORD=${{ secrets.SSH_PASSWORD }}" >> $GITHUB_ENV
-
-    # Step 6: Test SSH connection using password
-    - name: Test SSH connection
-      run: |
-        echo "Testing SSH connection to remote RHEL VM"
-        sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no root@$RHEL_HOST "echo 'SSH connection successful!'"
-
+      - name: Run commands on RHEL VM using Password Authentication
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@192.168.18.74 << 'EOF'
+            # Your shell commands to run on the RHEL VM
+            sudo yum update -y
+            sudo yum install -y your-package
+            # Any other command you want to run remotely
+          EOF
