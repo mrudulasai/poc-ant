@@ -1,15 +1,29 @@
-name: Connect to RHEL VM without SSH Key
+# This workflow will build a Java project with Ant
+ 
+name: POC on Ant based Java project
+ 
 on:
   push:
-    branches:
-      - main
-
+    branches: [ main ]
+ 
 jobs:
-  connect-to-rhel-vm:
-    runs-on: ubuntu-latest
+  build:
+ 
+    runs-on: self-hosted
+ 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Ping the RHEL VM
-        run: ping -c 4 119.63.131.226
-
+    - uses: actions/checkout@v4
+    - name: Set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+ 
+    - name: Run mqsiprofile and Build.xml using ANT command
+      run: |
+        source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
+        # Replace with the actual path to your mqsiprofile script
+        echo "mqsiprofile has been executed."
+ 
+        echo "Run build.xml"
+        ant -noinput -buildfile BillPayment/build.xml
