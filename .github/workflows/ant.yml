@@ -22,4 +22,4 @@ jobs:
         echo "mqsiprofile has been executed."
  
         echo "Run build.xml"
-        ant -noinput -buildfile BillPayment/build.xml
+        sudo ant -noinput -buildfile BillPayment/build.xml
