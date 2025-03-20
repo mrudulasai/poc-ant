@@ -19,6 +19,11 @@ jobs:
       run: |
         source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
         echo "mqsiprofile has been executed."
- 
-        echo "Run build.xml"
-        ant -buildfile BillPayment/build.xml
+
+        export MQSI_REGISTRY_PATH=/home/linuxuser/mqsi_registry
+        mkdir -p $MQSI_REGISTRY_PATH
+        export ACE_REGISTRY=$MQSI_REGISTRY_PATH
+        ant -noinput -buildfile BillPayment/build.xml
+
+#        echo "Run build.xml"
+#       ant -buildfile BillPayment/build.xml
