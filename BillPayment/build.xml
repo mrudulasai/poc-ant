@@ -1,52 +1,41 @@
 <project name="BillPayment" default="build-bar" basedir=".">
- 
-                <property environment="env"/>
-                <property name="VERSION" value="25.2.1.0001"/>
-                <property name="OLD.VER" value="25.1.1.0004"/>
-               
-   
-    <property name="IBMINT" value="/opt/ibm/mqsi/ace-12.0.3.0/server/bin/ibmint" />
-    <property name="INPUT_PATH" value="/home/linuxuser/actions-runner/_work/poc-ant/poc-ant" />
-                <property name="RELEASE.DIR" value="/home/linuxuser/actions-runner/_work/poc-ant/poc-ant/BillPayment/release"/>
-    <property name="OUTPUT_BAR_FILE" value="/home/linuxuser/actions-runner/_work/poc-ant/poc-ant/BillPayment/release/SigService-${VERSION}.bar" />
-               
-                <target name="init" description="Initialization">
-                                    <echo message="${ant.version}"/>
-                                    <echo message="Java Version: ${java.version}"/>
-                                                <echo message="Broker Version: ${env.MQSI_VERSION}"/>
-                                    <echo message="Base Directory: ${basedir}"/>
-                                    <echo message="Workspace: ${WORKSPACE}"/>
-                                                <echo message="Release Directory: ${RELEASE.DIR}"/>
-                </target>
- 
-    <!-- Target to clean previous BAR file -->
-    <target name="clean">
-        <echo message="Cleaning previous BAR file..." />
-        <delete file="${OUTPUT_BAR_FILE}" />
-    </target>
-               
-              
-               
- 
-    <!-- Target to build the BAR file -->
-    <target name="build-bar" depends="init, clean">
-        <echo message="Building BAR file..." />
-       
-        <exec executable="${IBMINT}" failonerror="true">
-            <arg value="package" />
-            <arg value="--input-path" />
-            <arg value="${INPUT_PATH}" />
-            <arg value="--output-bar-file" />
-            <arg value="${OUTPUT_BAR_FILE}" />
-            <arg value="--project" />
-            <arg value="BillPayment" />
-                      
-               
-                               
-        </exec>
-       
-        <echo message="BAR file built successfully at ${OUTPUT_BAR_FILE}" />
-    </target>
-               
-               
+<property environment="env"/>
+<property name="VERSION" value="25.2.1.0001"/>
+<property name="OLD.VER" value="25.1.1.0004"/>
+
+<property name="IBMINT" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\ibmint" />
+<property name="INPUT_PATH" value="C:\BillPayment" />
+<property name="RELEASE.DIR" value="C:\BillPayment\release\"/>
+<property name="OUTPUT_BAR_FILE" value="C:\BillPayment\release\SigService-${VERSION}.bar" />
+<target name="init" description="Initialization">
+<echo message="${ant.version}"/>
+<echo message="Java Version: ${java.version}"/>
+<echo message="Broker Version: ${env.MQSI_VERSION}"/>
+<echo message="Base Directory: ${basedir}"/>
+<echo message="Workspace: ${WORKSPACE}"/>
+<echo message="Release Directory: ${RELEASE.DIR}"/>
+</target>
+<!-- Target to clean previous BAR file -->
+<target name="clean">
+<echo message="Cleaning previous BAR file..." />
+<delete file="${OUTPUT_BAR_FILE}" />
+</target>
+
+
+<!-- Target to build the BAR file -->
+<target name="build-bar" depends="init, clean">
+<echo message="Building BAR file..." />
+<exec executable="${IBMINT}" failonerror="true">
+<arg value="package" />
+<arg value="--input-path" />
+<arg value="${INPUT_PATH}" />
+<arg value="--output-bar-file" />
+<arg value="${OUTPUT_BAR_FILE}" />
+<arg value="--project" />
+<arg value="BillPayment" />
+
+</exec>
+<echo message="BAR file built successfully at ${OUTPUT_BAR_FILE}" />
+</target>
+
 </project>
