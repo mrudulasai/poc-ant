@@ -11,6 +11,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Verify IBM MQ environment
+      shell: pwsh
+      run: |
+        # Display the PATH to ensure mqsilist is in it
+        echo $Env:PATH
+
     - name: Run Build.xml using ANT command
       shell: pwsh
       run: |
