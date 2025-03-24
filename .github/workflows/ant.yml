@@ -8,10 +8,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up IBM ACE environment
+    - name: Set up IBM ACE environment and Run Build.xml using ANT command
       run: |
-        powershell -Command ". 'C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile'"
+        ". 'C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile'"
 
-    - name: Run Build.xml using ANT command
-      run: |
-        ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
+        #Run Build.xml using ANT command
+        & ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
