@@ -10,8 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Run Ant Build via Wrapper Script
+    - name: Source mqsiprofile and Run Ant Build
       shell: cmd
       run: |
-        echo "Starting wrapper script..."
-        C:\krpoc\build_wrapper.bat
+        echo "Sourcing mqsiprofile..."
+        call C:\PROGRA~1\IBM\ACE\12.0.7.0\server\bin\mqsiprofile.bat
+        echo "Environment variables:"
+        set MQSI_VERSION
+        echo "Running Ant build..."
+        ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
