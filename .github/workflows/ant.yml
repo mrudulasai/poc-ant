@@ -15,5 +15,8 @@ jobs:
       shell: cmd
       run: |
         rem Source the mqsiprofile
-        call "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile.bat"
+        call C:\PROGRA~1\IBM\ACE\12.0.7.0\server\bin\mqsiprofile.bat
+        rem Verifying environment variable
+        set MQSI_VERSION
+        rem Running Ant build
         ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
