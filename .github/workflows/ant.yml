@@ -22,3 +22,13 @@ jobs:
 
         # Run the mqsilist command after sourcing the mqsiprofile script
         mqsilist
+
+    - name: Verify environment variables
+      shell: pwsh
+      run: |
+        # Check the updated PATH
+        echo $Env:PATH
+
+        # Verify if mqsilist is available
+        Get-Command mqsilist
+
