@@ -20,3 +20,12 @@ jobs:
         # Source the mqsiprofile script to set the environment in the current session (with quotes)
         mqsiprofile
         
+    - name: Verify environment variables and mqsilist availability
+      shell: pwsh
+      run: |
+          # Check the updated PATH
+          echo $Env:PATH
+    
+          # Verify if mqsilist is available
+          Get-Command mqsilist
+
