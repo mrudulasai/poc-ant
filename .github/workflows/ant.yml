@@ -1,8 +1,9 @@
-# This workflow will build a Java project with Ant
-name: POC on Ant based Java project 
+name: POC on Ant based Java project
+
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: self-hosted
@@ -13,5 +14,8 @@ jobs:
     - name: Run Build.xml using ANT command
       shell: pwsh
       run: |
-        \C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile
+        # Source the mqsiprofile script to set the environment
+        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
 
+        # Now you can run additional ACE commands, for example, mqsilist
+        mqsilist
