@@ -12,6 +12,8 @@ jobs:
 
     - name: Run Build.xml using ANT command
       run: |
+        source /opt/ibm/mqsi/ace-12.0.3.0/server/bin/mqsiprofile
+        echo "mqsiprofile has been executed"
         echo "Run build.xml"
         ant -noinput -buildfile BillPayment/build.xml
 
