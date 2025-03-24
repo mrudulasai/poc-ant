@@ -18,7 +18,5 @@ jobs:
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
         
         # Source the mqsiprofile script to set the environment in the current session (with quotes)
-        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
-
-        # Run mqsilist to verify the environment and list the integration nodes
-        mqsilist
+        mqsiprofile
+        
