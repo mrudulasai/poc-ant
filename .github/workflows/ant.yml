@@ -11,6 +11,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Run Build.xml using ANT command
+      run: |
+        echo "Run build.xml"
+        ant -noinput -buildfile BillPayment/build.xml
+
     - name: Run mqsiprofile and mqsilist commands
       run: |
         # Source the mqsiprofile
