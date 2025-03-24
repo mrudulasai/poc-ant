@@ -12,5 +12,5 @@ jobs:
 
     - name: Run Build.xml using ANT command
       run: |
-        echo "Run build.xml"
-        ant -noinput -buildfile BillPayment/build.xml
+        mqsilist
+
