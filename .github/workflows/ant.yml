@@ -18,17 +18,4 @@ jobs:
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
         
         # Source the mqsiprofile script to set the environment
-        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
-
-        # Run the mqsilist command after sourcing the mqsiprofile script
-        mqsilist
-
-    - name: Verify environment variables
-      shell: pwsh
-      run: |
-        # Check the updated PATH
-        echo $Env:PATH
-
-        # Verify if mqsilist is available
-        Get-Command mqsilist
-
+        cmd.exe /C ""C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" && mqsilist"
