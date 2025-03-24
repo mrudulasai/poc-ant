@@ -13,5 +13,4 @@ jobs:
     - name: Run Build.xml using ANT command
       run: |
         # Source the mqsiprofile
-        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" &&
-        "ant -noinput -buildfile C:\krpoc\BillPayment\build.xml"
+        . '"C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"'; ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
