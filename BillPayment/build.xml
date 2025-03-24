@@ -1,49 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="BillPayment" default="build-bar" basedir=".">
-<property environment="env"/>
-<property name="VERSION" value="25.2.1.0001"/>
-<property name="OLD.VER" value="25.1.1.0004"/>
-<property name="IBMINT" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\ibmint" />
-<property name="INPUT_PATH" value="C:\krpoc\BillPayment" />
-<property name="RELEASE.DIR" value="C:\krpoc\BillPayment\release\"/>
-<property name="OUTPUT_BAR_FILE" value="C:\krpoc\BillPayment\release\SigService-${VERSION}.bar" />
-<target name="init" description="Initialization">
-<echo message="${ant.version}"/>
-<echo message="Java Version: ${java.version}"/>
-<echo message="Broker Version: ${env.MQSI_VERSION}"/>
-<echo message="Base Directory: ${basedir}"/>
-<echo message="Workspace: ${WORKSPACE}"/>
-<echo message="Release Directory: ${RELEASE.DIR}"/>
-</target>
-<!-- Target to clean previous BAR file -->
-<target name="clean">
-<echo message="Cleaning previous BAR file..." />
-<delete file="${OUTPUT_BAR_FILE}" />
-</target>
-<!-- Target to build the BAR file -->
-<target name="build-bar" depends="init, clean">
-<echo message="Building BAR file..." />
-<exec executable="${IBMINT}" failonerror="true">
-<arg value="package" />
-<arg value="--input-path" />
-<arg value="${INPUT_PATH}" />
-<arg value="--output-bar-file" />
-<arg value="${OUTPUT_BAR_FILE}" />
-<arg value="--project" />
-<arg value="BillPayment" />
-</exec>
-<echo message="BAR file built successfully at ${OUTPUT_BAR_FILE}" />
-</target>
-<!-- Target to deploy the BAR file using mqsideploy -->
-<target name="deploy" depends="build-bar">
-<echo message="Deploying BAR file using mqsideploy..." />
-<exec executable="mqsideploy" failonerror="true">
-<arg value="Ace12Node" />
-<arg value="-e" />
-<arg value="Default" />
-<arg value="-a" />
-<arg value="${OUTPUT_BAR_FILE}" />
-</exec>
-<echo message="Deployment completed successfully." />
-</target>
- 
+    <!-- Properties -->
+    <property environment="env"/>
+    <property name="VERSION" value="25.2.1.0001"/>
+    <property name="OLD.VER" value="25.1.1.0004"/>
+    <property name="PROF" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" />
+    <property name="IBMINT" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\ibmint" />
+    <property name="INPUT_PATH" value="C:\krpoc\BillPayment" />
+    <property name="RELEASE.DIR" value="C:\krpoc\BillPayment\release\"/>
+    <property name="OUTPUT_BAR_FILE" value="C:\krpoc\BillPayment\release\SigService-${VERSION}.bar" />
+
+    <!-- Initialization target -->
+    <target name="init" description="Initialization">
+        <echo message="${ant.version}"/>
+        <echo message="Java Version: ${java.version}"/>
+        <echo message="Broker Version: ${env.MQSI_VERSION}"/>
+        <echo message="Base Directory: ${basedir}"/>
+        <echo message="Workspace: ${WORKSPACE}"/>
+        <echo message="Release Directory: ${RELEASE.DIR}"/>
+    </target>
+
+    <!-- Clean previous BAR file -->
+    <target name="clean">
+        <echo message="Cleaning previous BAR file..." />
+        <delete file="${OUTPUT_BAR_FILE}" />
+    </target>
+
+    <!-- Build BAR file -->
+    <target name="build-bar" depends="init, clean">
+        <echo message="Building BAR file..." />
+
+        <!-- Execute mqsiprofile to set environment variables -->
+        <exec executable="powershell.exe" failonerror="true">
+            <arg value="-Command" />
+            <arg value="& '${PROF}'" />
+        </exec>
+
+        <!-- Execute ibmint command for packaging -->
+        <exec executable="powershell.exe" failonerror="true">
+            <arg value="-Command" />
+            <arg value="& '${IBMINT} package --input-path ${INPUT_PATH} --output-bar-file ${OUTPUT_BAR_FILE} --project BillPayment'" />
+        </exec>
+
+        <echo message="BAR file built successfully at ${OUTPUT_BAR_FILE}" />
+    </target>
+
 </project>
