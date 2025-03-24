@@ -3,6 +3,7 @@
 <property name="VERSION" value="25.2.1.0001"/>
 <property name="OLD.VER" value="25.1.1.0004"/>
 
+<property name="PROF" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" />
 <property name="IBMINT" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\ibmint" />
 <property name="INPUT_PATH" value="C:\BillPayment" />
 <property name="RELEASE.DIR" value="C:\BillPayment\release\"/>
@@ -25,6 +26,7 @@
 <!-- Target to build the BAR file -->
 <target name="build-bar" depends="init, clean">
 <echo message="Building BAR file..." />
+<exec executable="${PROF}" failonerror="true">
 <exec executable="${IBMINT}" failonerror="true">
 <arg value="package" />
 <arg value="--input-path" />
