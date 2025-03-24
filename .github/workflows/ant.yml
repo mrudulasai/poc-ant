@@ -11,10 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Add IBM MQ tools to PATH manually and run mqsilist
+    - name: Add IBM MQ tools to PATH and run mqsilist
       shell: pwsh
       run: |
-        # Add IBM MQ tools to PATH manually, ensuring to handle the space in "Program Files"
+        # Add IBM MQ tools to PATH manually, ensuring spaces in path are handled
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
-        mqsiprofile
+        
+        # Source the mqsiprofile script to set the environment
+        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
 
+        # Run the mqsilist command after sourcing the mqsiprofile script
+        mqsilist
