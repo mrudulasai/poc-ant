@@ -36,6 +36,7 @@
 <arg value="--project" />
 <arg value="BillPayment" />
 
+  </exec>
 </exec>
 <echo message="BAR file built successfully at ${OUTPUT_BAR_FILE}" />
 </target>
