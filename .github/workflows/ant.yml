@@ -13,13 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run IBM ACE mqsiprofile command
-        run: |
-          # Ensure we run this command in the correct environment
-          . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
-        shell: pwsh
-
       - name: Run Ant build
         run: |
           ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
-        shell: pwsh
