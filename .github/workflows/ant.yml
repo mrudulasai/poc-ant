@@ -11,17 +11,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Source mqsiprofile to set environment
+      shell: pwsh
+      run: |
+        # Source the mqsiprofile script to set the environment in the current session
+        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
+
+        # Verify that the environment is correctly set by checking the PATH
+        echo "Current PATH: $Env:PATH"
+
     - name: Verify IBM MQ environment
       shell: pwsh
       run: |
-        # Display the PATH to ensure mqsilist is in it
-        echo $Env:PATH
-
-    - name: Run Build.xml using ANT command
-      shell: pwsh
-      run: |
-        # Source the mqsiprofile script to set the environment
-        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
-
-        # Now you can run additional ACE commands, for example, mqsilist
+        # After sourcing the profile, run mqsilist to check if it's available
         mqsilist
