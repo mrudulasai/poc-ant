@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Run Ant Build via Wrapper Script
+      shell: cmd
       run: |
         echo "Starting wrapper script..."
-        call C:\krpoc\build_wrapper.bat
+        C:\krpoc\build_wrapper.bat
