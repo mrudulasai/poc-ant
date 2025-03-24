@@ -13,5 +13,5 @@ jobs:
     - name: Run Build.xml using ANT command
       shell: pwsh
       run: |
-        \IBM\ACE\12.0.7.0\mqsiprofile
+        C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile
 
