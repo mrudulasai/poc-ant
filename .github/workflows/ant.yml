@@ -12,11 +12,7 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Run Build.xml using ANT command
-      shell: pwsh  # Use PowerShell as the shell
       run: |
-        # Source the mqsiprofile to set the environment variables for IBM MQ tools
-        & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
+        # Source the mqsiprofile and run the build.xml using the ant command
+        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" && "ant -noinput -buildfile BillPayment/build.xml"
 
-        # Now, run the build.xml using the ant command
-        echo "Running build.xml using ANT"
-        ant -noinput -buildfile BillPayment/build.xml
