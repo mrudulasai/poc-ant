@@ -18,7 +18,5 @@ jobs:
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
 
         # Source the mqsiprofile script to set the environment variables correctly
-        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
+        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" && "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsilist"
 
-        # After sourcing, the mqsilist command should be available
-        mqsilist
