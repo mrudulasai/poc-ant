@@ -20,3 +20,6 @@ jobs:
         # Use cmd.exe to execute mqsiprofile to properly source it in the environment
         cmd.exe /C "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
 
+        # Run mqsilist after sourcing mqsiprofile
+        mqsilist
+
