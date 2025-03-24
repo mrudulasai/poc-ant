@@ -17,10 +17,6 @@ jobs:
         # Source the mqsiprofile to set the environment variables for IBM MQ tools
         & "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
 
-        # Verify environment variables are set correctly (optional)
-        echo "Environment variables after sourcing mqsiprofile:"
-        Get-ChildItem Env:
-
         # Now, run the build.xml using the ant command
         echo "Running build.xml using ANT"
         ant -noinput -buildfile BillPayment/build.xml
