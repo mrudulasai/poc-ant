@@ -11,5 +11,5 @@ jobs:
     - name: Run Build.xml using ANT command
       run: |
         #Run build.xml using ant command
-        "ant -noinput -buildfile C:\Program Files\BillPayment\build.xml"
+        ant -noinput -buildfile C:\Program Files\BillPayment\build.xml
 
