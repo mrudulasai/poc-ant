@@ -10,8 +10,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Run Build.xml using ANT command
+    - name: Source mqsiprofile and run Ant build
       run: |
-        # Source the mqsiprofile
-        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile";
+        echo "Sourcing mqsiprofile"
+        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
+        echo "Environment variables:"
+        echo $MQSI_VERSION
+        echo "Running Ant build..."
         ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
