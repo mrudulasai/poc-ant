@@ -11,8 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Add IBM MQ tools to PATH and source mqsiprofile
-      shell: pwsh
+    - name: Run mqsiprofile and mqsilist commands
       run: |
         # Source the mqsiprofile
         . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
