@@ -14,3 +14,8 @@ jobs:
       run: |
         echo "Run build.xml"
         ant -noinput -buildfile BillPayment/build.xml
+
+    - name: Run the mqsideploy command to deploy the bar file
+      run: |
+        echo "deploy bar file"
+        mqsideploy Ace12Node -e Default -a C:\BillPayment\release\SigService-25.2.1.0001.bar
