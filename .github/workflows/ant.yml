@@ -12,8 +12,8 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Run Build.xml using ANT command
-      shell: bash
+      shell: cmd
       run: |
-        # Source the mqsiprofile
-        . "C:/PROGRA~1/IBM/ACE/12.0.7.0/server/bin/mqsiprofile"
-        ant -noinput -buildfile C:/krpoc/BillPayment/build.xml
+        rem Source the mqsiprofile
+        call "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile.bat"
+        ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
