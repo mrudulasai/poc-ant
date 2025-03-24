@@ -17,15 +17,6 @@ jobs:
         # Add IBM MQ tools to PATH manually, ensuring to handle the space in "Program Files"
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
         
-        # Source the mqsiprofile script to set the environment in the current session (with quotes)
-        mqsiprofile
-        
-    - name: Verify environment variables and mqsilist availability
-      shell: pwsh
-      run: |
-          # Check the updated PATH
-          echo $Env:PATH
-    
-          # Verify if mqsilist is available
-          Get-Command mqsilist
+        # Use cmd.exe to execute mqsiprofile to properly source it in the environment
+        cmd.exe /C "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile"
 
