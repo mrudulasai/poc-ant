@@ -15,4 +15,5 @@ jobs:
       run: |
         $Env:PATH += ";C:\Program Files\IBM\ACE\12.0.7.0\server\bin"
         mqsiprofile
+        mqsilist
 
