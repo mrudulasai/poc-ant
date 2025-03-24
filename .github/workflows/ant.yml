@@ -10,7 +10,7 @@ jobs:
 
     - name: Set up IBM ACE environment and Run Build.xml using ANT command
       run: |
-        ". 'C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile'"
+        . "C:\Program Files\IBM\ACE\12.0.7.0\server\bin\mqsiprofile" &&
 
         #Run Build.xml using ANT command
-        & ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
+        "ant -noinput -buildfile C:\krpoc\BillPayment\build.xml"
