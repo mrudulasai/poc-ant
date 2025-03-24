@@ -10,7 +10,5 @@ jobs:
 
     - name: Run Build.xml using ANT command
       run: |
-
-        #Run build.xml using ant command
-        ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
+        ant -noinput -buildfile BillPayment/build.xml
 
