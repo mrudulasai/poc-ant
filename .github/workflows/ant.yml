@@ -1,18 +1,16 @@
-name: Run IBM ACE and Ant Commands
-
+name: POC on Ant based Java project
+ 
 on:
   push:
-    branches:
-      - main  # or any other trigger event
-
+    branches: [ main ]
+ 
 jobs:
-  run-commands:
-    runs-on: [self-hosted, windows]
-    
+  build:
+    runs-on: self-hosted
+ 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Run Ant build
-        run: |
-          ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
+    - uses: actions/checkout@v4
+ 
+    - name: Run Build.xml using ANT command
+      run: |
+        ant -noinput -buildfile C:\krpoc\BillPayment\build.xml
