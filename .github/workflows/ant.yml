@@ -12,12 +12,5 @@ jobs:
 
     - name: Run Build.xml using ANT command
       run: |
-        \IBM\ACE\12.0.7.0\bin\server\mqsiprofile
-        echo "mqsiprofile has been executed"
         echo "Run build.xml"
         ant -noinput -buildfile BillPayment/build.xml
-
-    - name: Run the mqsideploy command to deploy the bar file
-      run: |
-        echo "deploy bar file"
-        mqsideploy Ace12Node -e Default -a C:\BillPayment\release\SigService-25.2.1.0001.bar
