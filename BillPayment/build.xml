@@ -1,6 +1,6 @@
 <project name="BillPayment" default="build-bar" basedir=".">
 <property environment="env"/>
-<property name="VERSION" value="25.2.1.0001"/>
+<property name="VERSION" value="25.2.1.0002"/>
 <property name="OLD.VER" value="25.1.1.0004"/>
 <property name="IBMINT" value="C:\Program Files\IBM\ACE\12.0.7.0\server\bin\ibmint" />
 <property name="INPUT_PATH" value="C:\krpoc\BillPayment" />
