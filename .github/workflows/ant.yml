@@ -2,7 +2,6 @@ name: POC on Ant based Java project
 on:
   push:
     branches: [ main ]
-
 jobs:
   build:
     runs-on: self-hosted
