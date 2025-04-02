@@ -13,6 +13,7 @@ jobs:
     - name: Run Build.xml using ANT command
       shell: cmd
       env:
+          NODE_NAME: "Ace23Node"
           DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
           DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
       run: |
