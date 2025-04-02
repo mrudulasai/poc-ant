@@ -13,8 +13,9 @@
     <property name="VAULT_RC_LOCATION" value="C:\ProgramData\IBM\MQSI"/>
     <property name="CREDENTIAL_NAME" value="nodedbtest"/>
     <property name="CREDENTIAL_TYPE" value="odbc"/>
-    <property name="USERNAME" value="user"/>
-    <property name="PASSWORD" value="password"/>
+    <property name="USERNAME" value="${env.GITHUB_USERNAME}"/>
+    <property name="PASSWORD" value="${env.GITHUB_PASSWORD}"/>
+
 
     <!-- Initialization -->
     <target name="init">
